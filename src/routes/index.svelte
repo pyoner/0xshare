@@ -6,7 +6,7 @@
 
 	const initialiseBundlr = async (p: providers.Provider) => {
 		const WebBundlr = (await import('@bundlr-network/client')).WebBundlr;
-		const bundlr = new WebBundlr('https://node1.bundlr.network', 'bsc', p);
+		const bundlr = new WebBundlr('https://node1.bundlr.network', 'bnb', p);
 		await bundlr.ready();
 
 		console.log(bundlr);
