@@ -1,9 +1,4 @@
 <script lang="ts">
-	import type { WebBundlr } from '@bundlr-network/client';
-
-	import type { providers } from 'ethers';
-
-	import { onMount } from 'svelte';
 	import {
 		connected,
 		provider,
@@ -12,30 +7,7 @@
 		signerAddress
 	} from 'svelte-ethers-store';
 
-	let bundlr: WebBundlr;
-	const initialiseBundlr = async (p: providers.Provider) => {
-		const WebBundlr = (await import('@bundlr-network/client')).WebBundlr;
-		bundlr = new WebBundlr('https://node1.bundlr.network', 'bnb', p);
-		await bundlr.ready();
-
-		bundlr.createTransaction;
-
-		console.log('address', bundlr.address);
-
-		const loadedBalance = await bundlr.getLoadedBalance();
-		console.log('loadedBalance', loadedBalance.toString());
-
-		const balance = await bundlr.getBalance($signerAddress);
-		console.log('balance', balance.toString());
-	};
-
-	// onMount(async () => {
-	// 	await defaultEvmStores.setProvider();
-	// 	if ($connected && $provider) {
-	// 		console.log($provider);
-	// 		initialiseBundlr($provider);
-	// 	}
-	// });
+	import bundlr from '$lib/stores/bundlr';
 
 	function connectMetamask() {
 		console.log('connect metamask');
@@ -53,6 +25,18 @@
 <div>
 	{#if $connected}
 		<button on:click={disconnectMetamask}>Disconnect Metamask</button>
+		<div>
+			network<br />
+			{#await $provider.getNetwork() then network}
+				name: {network.name}<br />
+				chainId: {network.chainId}<br />
+			{/await}
+		</div>
+		<div>
+			{#await $bundlr then b}
+				{b?.address}
+			{/await}
+		</div>
 	{:else}
 		<button on:click={connectMetamask}>Connect Metamask</button>
 	{/if}
