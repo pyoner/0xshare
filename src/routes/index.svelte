@@ -1,13 +1,11 @@
 <script lang="ts">
-	import {
-		connected,
-		provider,
-		defaultEvmStores,
-		signer,
-		signerAddress
-	} from 'svelte-ethers-store';
+	import type { WebBundlr } from '@bundlr-network/client';
+	import type { Readable } from 'svelte/store';
+	import { onMount } from 'svelte';
+	import { connected, provider, defaultEvmStores, signer } from 'svelte-ethers-store';
 
-	import bundlr from '$lib/stores/bundlr';
+	import initBundlr from '$lib/stores/bundlr';
+	import BundlrUploader from '$lib/components/BundlrUploader.svelte';
 
 	function connectMetamask() {
 		console.log('connect metamask');
@@ -17,6 +15,10 @@
 		console.log('disconnect metamask');
 		return defaultEvmStores.disconnect();
 	}
+	let bundlr: Readable<WebBundlr>;
+	onMount(async () => {
+		bundlr = await initBundlr();
+	});
 </script>
 
 <h1>Welcome to SvelteKit</h1>
@@ -30,13 +32,12 @@
 			{#await $provider.getNetwork() then network}
 				name: {network.name}<br />
 				chainId: {network.chainId}<br />
+			{:catch error}
+				{error}
 			{/await}
 		</div>
-		<div>
-			{#await $bundlr then b}
-				{b?.address}
-			{/await}
-		</div>
+
+		<BundlrUploader bundlr={$bundlr} />
 	{:else}
 		<button on:click={connectMetamask}>Connect Metamask</button>
 	{/if}

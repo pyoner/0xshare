@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-auto';
+import adapter from '@sveltejs/adapter-static';
 import preprocess from 'svelte-preprocess';
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
@@ -10,21 +10,23 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({
+			fallback: '200.html'
+		}),
 		vite: {
-			build: { target: 'esnext' },
+			build: {
+				target: 'esnext'
+			},
 			optimizeDeps: {
 				esbuildOptions: {
-					// Node.js global to browser globalThis
 					define: {
 						global: 'globalThis'
 					},
-					// Enable esbuild polyfill plugins
 					plugins: [
-						NodeModulesPolyfillPlugin(),
 						NodeGlobalsPolyfillPlugin({
 							buffer: true
-						})
+						}),
+						NodeModulesPolyfillPlugin()
 					]
 				}
 			}
