@@ -1,7 +1,5 @@
 import adapter from '@sveltejs/adapter-static';
 import preprocess from 'svelte-preprocess';
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 
 import stdLibBrowser from 'node-stdlib-browser';
 import plugin from 'node-stdlib-browser/helpers/esbuild/plugin';
@@ -29,13 +27,7 @@ const config = {
 						process: 'process',
 						Buffer: 'Buffer'
 					},
-					plugins: [
-						// NodeGlobalsPolyfillPlugin({
-						// 	buffer: true
-						// }),
-						// NodeModulesPolyfillPlugin()
-						plugin(stdLibBrowser)
-					]
+					plugins: [plugin(stdLibBrowser)]
 				}
 			}
 		}

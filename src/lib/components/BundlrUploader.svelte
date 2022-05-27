@@ -7,17 +7,21 @@
 	async function upload(b: WebBundlr, files: FileList) {
 		const ff = Array.from(files);
 		const totalSize = ff.reduce((acc, file) => acc + file.size, 0);
+		console.log('totalSize', totalSize);
 
 		// Get the cost for upload
 		const price = await b.getPrice(totalSize);
+		console.log('price', price.toString());
+
 		// Get your current balance
 		const balance = await b.getLoadedBalance();
+		console.log('balance', balance.toString());
 
 		// If you don't have enough balance for the upload
-		if (balance.isGreaterThan(price)) {
+		if (price.isGreaterThan(balance)) {
 			// Fund your account with the difference
 			// We multiply by 1.1 to make sure we don't run out of funds
-			await b.fund(balance.minus(price).multipliedBy(1.1));
+			await b.fund(price.minus(balance), 1.1);
 		}
 
 		// Create, sign and upload the transaction
@@ -34,10 +38,11 @@
 		});
 	}
 
-	function uploadHandler() {
+	async function uploadHandler() {
 		if (!files.length) {
 			return;
 		}
+		await bundlr.ready();
 		upload(bundlr, files);
 	}
 </script>

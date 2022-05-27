@@ -1,4 +1,4 @@
-import type { WebBundlr } from '@bundlr-network/client/build/web';
+import type { WebBundlr } from '@bundlr-network/client';
 import { derived, type Readable } from 'svelte/store';
 import { provider } from 'svelte-ethers-store';
 
