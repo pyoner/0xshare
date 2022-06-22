@@ -1,11 +1,13 @@
 <script lang="ts">
 	import type { WebBundlr } from '@bundlr-network/client';
 	import type { Readable } from 'svelte/store';
+
 	import { onMount } from 'svelte';
 	import { connected, provider, defaultEvmStores, signer } from 'svelte-ethers-store';
 
 	import initBundlr from '$lib/stores/bundlr';
 	import BundlrUploader from '$lib/components/BundlrUploader.svelte';
+	import BundlrDashboard from '$lib/components/BundlrDashboard.svelte';
 
 	function connectMetamask() {
 		console.log('connect metamask');
@@ -37,7 +39,13 @@
 			{/await}
 		</div>
 
-		<BundlrUploader bundlr={$bundlr} />
+		{#await $bundlr.ready()}
+			...loading
+		{:then}
+			=====
+			<BundlrDashboard bundlr={$bundlr} />
+			<BundlrUploader bundlr={$bundlr} />
+		{/await}
 	{:else}
 		<button on:click={connectMetamask}>Connect Metamask</button>
 	{/if}
