@@ -31,7 +31,7 @@
 		ff.forEach(async (f) => {
 			const data = new Uint8Array(await f.arrayBuffer());
 
-			const tags: Tag[] = [...appTags, { name: 'Content-Type', value: f.type }];
+			const tags: Tag[] = [...appTags(), { name: 'Content-Type', value: f.type }];
 			const tx = b.createTransaction(data, { tags });
 			console.log('tx', tx);
 
