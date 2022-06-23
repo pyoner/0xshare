@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { appTags } from '$lib/bundlr';
+	import type { Tag } from '$lib/types';
+
 	import type { WebBundlr } from '@bundlr-network/client';
 
 	export let bundlr: WebBundlr;
@@ -28,7 +31,8 @@
 		ff.forEach(async (f) => {
 			const data = new Uint8Array(await f.arrayBuffer());
 
-			const tx = b.createTransaction(data);
+			const tags: Tag[] = [...appTags, { name: 'Content-Type', value: f.type }];
+			const tx = b.createTransaction(data, { tags });
 			console.log('tx', tx);
 
 			const signature = await tx.sign();
