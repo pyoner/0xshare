@@ -35,7 +35,9 @@
   "type": "module",
   "dependencies": {
     "@bundlr-network/client": "^0.7.13",
+    "@xstate/svelte": "^2.0.0",
     "ethers": "^5.6.9",
-    "svelte-ethers-store": "^2.3.3"
+    "svelte-ethers-store": "^2.3.3",
+    "xstate": "^4.32.1"
   }
 }
